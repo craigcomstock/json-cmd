@@ -8,26 +8,26 @@ This example project shows a minimal autotools setup, using libntech as a git su
 ### Download
 
 ```
-$ git clone https://github.com/cfengine/libntech_example.git
-$ cd libntech_example
-$ git submodule init
-$ git submodule update
+git clone https://github.com/cfengine/libntech_example.git
+cd libntech_example
+git submodule init
+git submodule update
 ```
 
 ### Build dependency
 
 ```
-$ cd libntech
-$ git fetch --all --tags
-$ ./autogen.sh
-$ make -j32
+cd libntech
+git fetch --all --tags
+./autogen.sh
+make -j32
 ```
 
 ### Build examples
 
 ```
-$ ./autogen.sh
-$ make -j32
+./autogen.sh
+make -j32
 ```
 
 ## File size
@@ -37,7 +37,7 @@ One uses the `Seq` data structure from libntech (and allocation functions), the 
 After building with the steps above, you can compare the file size:
 
 ```
-$ ls -al argv_printer*
+ls -al argv_printer*
 -rwxr-xr-x  1 olehermanse  staff  10908 Jul 29 14:22 argv_printer_libs
 -rwxr-xr-x  1 olehermanse  staff   9024 Jul 29 14:22 argv_printer_zero
 ```
