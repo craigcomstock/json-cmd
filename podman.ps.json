@@ -1,0 +1,49 @@
+[
+  {
+    "AutoRemove": false,
+    "Command": [
+      "httpd-foreground"
+    ],
+    "CreatedAt": "24 hours ago",
+    "CIDFile": "",
+    "Exited": false,
+    "ExitedAt": 1779312198,
+    "ExitCode": 0,
+    "ExposedPorts": {
+      "80": [
+  "tcp"
+]
+    },
+    "Id": "ece583449836c061d7f97b75f142a6a0e38a4ea4583227222921cb378859df83",
+    "Image": "docker.io/library/httpd:latest",
+    "ImageID": "b9097c67d4a2c6d267e015e6297a61afdd1870f904f9229fce3c068db860cd68",
+    "IsInfra": false,
+    "Labels": null,
+    "Mounts": [],
+    "Names": [
+      "agitated_aryabhata"
+    ],
+    "Namespaces": {
+      
+    },
+    "Networks": [],
+    "Pid": 13179,
+    "Pod": "",
+    "PodName": "",
+    "Ports": [
+      {
+        "host_ip": "",
+        "container_port": 80,
+        "host_port": 8080,
+        "range": 1,
+        "protocol": "tcp"
+      }
+    ],
+    "Restarts": 0,
+    "Size": null,
+    "StartedAt": 1779398025,
+    "State": "running",
+    "Status": "Up 5 seconds",
+    "Created": 1779312096
+  }
+]

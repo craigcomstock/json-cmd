@@ -2,6 +2,7 @@
 #include <file_lib.h>
 #include <json.h>
 #include <string_lib.h>
+#include <string_sequence.h> // for SeqStringFromString()
 #include <fcntl.h> // O_RDONLY
 
 void usage(char *argv[])
@@ -44,6 +45,59 @@ void prettyPrintJson(JsonElement *value)
   printf("%s\n", output);
 }
 
+int query(JsonElement *element, Seq *queryParts, int queryIndex)
+{
+  // recursive function to pop off querySequence items until either found and print the path and value or find nothing
+  fprintf(stderr, "query(element, queryParts, queryIndex: %d)\n", queryIndex);
+  fprintJson(stderr, element);
+
+  int queryLength = SeqLength(queryParts);
+  fprintf(stderr, "queryLength is %d\n", queryLength);
+
+
+  if (queryIndex > queryLength) {
+    return 0;
+  }
+
+  char *queryPart = SeqAt(queryParts, queryIndex);
+  fprintf(stderr, "queryPart[%d] is %s\n", queryIndex, queryPart);
+
+  if (StringEqual(queryPart, "*")) {
+    JsonElementType jet = JsonGetElementType(element);
+    if (jet != JSON_ELEMENT_TYPE_CONTAINER) {
+      fprintf(stderr, "Failed to find container for * query at level %d\n", queryIndex);
+      return 1;
+    }
+
+    JsonIterator iter = JsonIteratorInit(element);
+    JsonContainerType jct = JsonGetContainerType(element);
+    JsonElement *next;
+
+    if (jct == JSON_CONTAINER_TYPE_OBJECT) {
+      fprintf(stderr, "iterating over object\n");
+      const char *key;
+      while (key = JsonIteratorNextKey(&iter)) {
+        JsonElement *next = JsonObjectGet(element, key);
+        if (query(next, queryParts, queryIndex+1) != 0) {
+          return 0;
+        }
+      }
+    }
+    if (jct == JSON_CONTAINER_TYPE_ARRAY) {
+      fprintf(stderr, "iteration over array\n");
+      while (next = JsonIteratorNextValue(&iter)) {
+        if (query(next, queryParts, queryIndex+1) != 0) {
+          return 0;
+        }
+      }
+    }
+  } else {
+    fprintf(stderr, "looking for key with queryPart %s\n", queryPart);
+    JsonElement *value = JsonObjectGet(element, queryPart);
+    printJsonWithKey(queryPart, value);
+  }
+  return 0;
+}
 
 int main(int argc, char *argv[])
 {
@@ -92,8 +146,19 @@ int main(int argc, char *argv[])
              StringStartsWith("print", argv[1])) {
     prettyPrintJson(json);
     return 0;
-  } else {
+  }
+
+  fprintf(stderr, "argi is %d\n", argi);
+  if (argi > argc)
+  {
+    fprintf(stderr, "Expected a query argument\n");
     usage(argv);
     return 1;
   }
+
+  char *queryString = argv[argi];
+  fprintf(stderr, "queryString is %s\n", queryString);
+
+  Seq *queryParts = SeqStringFromString(queryString, '/');
+  query(json, queryParts, 0);
 }
