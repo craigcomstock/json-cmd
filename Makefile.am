@@ -7,7 +7,7 @@
 # is actually worse than linking to libutils.la and letting the compiler/linker
 # optimize for size and strip dead code.
 
-# Run make inside libutils as well:
+# Run make inside libntech as well:
 SUBDIRS = libntech tests/unit
 
 # Look for macros inside m4 directory:
