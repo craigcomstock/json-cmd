@@ -2,6 +2,7 @@
 #include <file_lib.h>
 #include <json.h>
 #include <string_lib.h>
+#include <fcntl.h> // O_RDONLY
 
 void usage(char *argv[])
 {
