@@ -3,6 +3,7 @@
 #include <json.h>
 #include <string_lib.h>
 #include <string_sequence.h> // for SeqStringFromString()
+#include <regex.h>
 #include <fcntl.h> // O_RDONLY
 
 void usage(char *argv[])
@@ -93,8 +94,38 @@ int query(JsonElement *element, Seq *queryParts, int queryIndex)
     }
   } else {
     fprintf(stderr, "looking for key with queryPart %s\n", queryPart);
-    JsonElement *value = JsonObjectGet(element, queryPart);
-    printJsonWithKey(queryPart, value);
+    const char *key = queryPart; // unless we find a subscript notation
+
+    Seq *captures;
+    captures = StringMatchCaptures("^(.*)[\[\(]([0-9]*)[])]$", queryPart, false);
+
+    if (captures != NULL) {
+      key = BufferData(SeqAt(captures, 1));
+      fprintf(stderr, "found %ld captures\n", SeqLength(captures));
+      for (int i=0; i<SeqLength(captures); i++) {
+        fprintf(stderr, "capture[%d] is %s\n", i, BufferData(SeqAt(captures, i)));
+      }
+    }
+
+    fprintf(stderr, "key is %s\n", key);
+    JsonElement *value;
+    value = JsonObjectGet(element, key);
+    if (value == NULL ) {
+      fprintf(stderr, "No object for key %s\n", key);
+      return 0;
+    }
+    if (captures == NULL) {
+      fprintf(stderr, "No captures\n");
+      printJsonWithKey(key, value);
+    } else {
+      int64_t index;
+      if (StringToInt64(BufferData(SeqAt(captures, 2)), &index)) {
+        fprintf(stderr, "Unable to parse number portion of key %s\n", queryPart);
+        exit(1);
+      }
+      JsonElement *item = JsonArrayGetAsObject(value, index);
+      printJsonWithKey(key, item);
+    }
   }
   return 0;
 }
