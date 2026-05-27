@@ -1,0 +1,7 @@
+[submodule "libntech"]
+	path = libntech
+	url = https://github.com/cfengine/libntech
+[submodule "tests/unit/cmocka"]
+	path = tests/unit/cmocka
+	url = https://git.cryptomilk.org/projects/cmocka.git
+	ignore = untracked
