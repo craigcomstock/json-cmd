@@ -1,5 +1,8 @@
 set -ex
 make json
-./json <object.json
-./json object.json
-./json array.json
+./json check <object.json
+./json ch object.json
+./json c array.json
+./json pretty array.json
+./json print <array.json
+./json p object.json
