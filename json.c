@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <file_lib.h>
+#include <fcntl.h>
 #include <json.h>
 #include <string_lib.h>
 #include <string_sequence.h> // for SeqStringFromString()
