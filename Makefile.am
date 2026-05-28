@@ -24,8 +24,6 @@ bin_PROGRAMS = \
 json_SOURCES = json.c
 json_LDADD = libntech/libutils/.libs/libutils.la
 json_CPPFLAGS = -I libntech/libutils/ -I libntech/libcompat/
-json_CFLAGS = -Os -fdata-sections -ffunction-sections
-json_LDFLAGS = $(STRIP_LDFLAGS)
 
 # An example target with no dependencies, for comparison:
 argv_printer_zero_SOURCES = \
