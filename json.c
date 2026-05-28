@@ -167,7 +167,7 @@ int main(int argc, char *argv[])
   if (JsonParse(&data, &json) != JSON_PARSE_OK)
   {
     WriterClose(w);
-    fprintf(stderr, "json parse failed");
+    fprintf(stderr, "json parse failed\n");
     return 2;
   }
   WriterClose(w);
