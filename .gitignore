@@ -44,3 +44,4 @@
 /tests/unit/Makefile.in
 /tests/unit/test_argv_lib
 /tests/unit/test_argv_lib.trs
+/json
