@@ -57,7 +57,7 @@ int query(JsonElement *element, Seq *queryParts, int queryIndex)
   fprintf(stderr, "queryLength is %d\n", queryLength);
 
 
-  if (queryIndex > queryLength) {
+  if (queryIndex+1 > queryLength) {
     return 0;
   }
 
@@ -88,6 +88,7 @@ int query(JsonElement *element, Seq *queryParts, int queryIndex)
     if (jct == JSON_CONTAINER_TYPE_ARRAY) {
       fprintf(stderr, "iteration over array\n");
       while (next = JsonIteratorNextValue(&iter)) {
+        printf("\n"); // new row, new line :p empty line to indicate next row, obtuse but still visually makes sense
         if (query(next, queryParts, queryIndex+1) != 0) {
           return 0;
         }
@@ -117,7 +118,11 @@ int query(JsonElement *element, Seq *queryParts, int queryIndex)
     }
     if (captures == NULL) {
       fprintf(stderr, "No captures\n");
-      printJsonWithKey(key, value);
+      if (queryIndex+1 < queryLength) {
+        return query(value, queryParts, queryIndex+1);
+      } else {
+        printJsonWithKey(key, value);
+      }
     } else {
       int64_t index;
       if (StringToInt64(BufferData(SeqAt(captures, 2)), &index)) {
@@ -125,7 +130,11 @@ int query(JsonElement *element, Seq *queryParts, int queryIndex)
         exit(1);
       }
       JsonElement *item = JsonArrayGetAsObject(value, index);
-      printJsonWithKey(key, item);
+      if (queryIndex+1 < queryLength) {
+        return query(item, queryParts, queryIndex+1);
+      } else {
+        printJsonWithKey(key, item);
+      }
     }
   }
   return 0;
